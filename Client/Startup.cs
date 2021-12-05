@@ -29,9 +29,9 @@ namespace Client
                 .AddCookie("Cookie")
                 .AddOpenIdConnect("oidc", config =>
                 {
-                    config.Authority = "https://localhost:5001/";
+                    config.Authority = "https://localhost:5001";
                     config.ClientId = "client_id_mvc";
-                    config.ClientSecret = "client_secret_mvc";
+                    //config.ClientSecret = "client_secret_mvc";
                     config.SaveTokens = true;
                     config.ResponseType = "code";
                     config.SignedOutCallbackPath = "/Home/Index";
@@ -39,7 +39,7 @@ namespace Client
                     // configure cookie claim mapping
                     config.ClaimActions.DeleteClaim("amr");
                     config.ClaimActions.DeleteClaim("s_hash");
-                    //config.ClaimActions.MapUniqueJsonKey("RawCoding.Grandma", "rc.garndma");
+                    //config.ClaimActions.MapUniqueJsonKey("RawCoding.role", "rc.role");
 
                     // two trips to load claims in to the cookie
                     // but the id token is smaller !
@@ -48,9 +48,8 @@ namespace Client
                     // configure scope
                     config.Scope.Clear();
                     config.Scope.Add("openid");
-                    config.Scope.Add("rc.scope");
+                    config.Scope.Add("profile");
                     config.Scope.Add("ApiOne");
-                    config.Scope.Add("ApiTwo");
                     config.Scope.Add("offline_access");
 
                 });

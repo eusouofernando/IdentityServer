@@ -17,30 +17,23 @@ namespace IdentityServer.Configuration
             return new List<ApiScope>
             {
                 // backward compat
-                new ApiScope("ApiOne"),
-                new ApiScope("ApiTwo")
+                new ApiScope("ApiOne","Api One"),
             };
         }
-
-        public static IEnumerable<IdentityResource> GetIdentityResources() =>
-        new List<IdentityResource>
-        {
-            new IdentityResources.OpenId(),
-            //new IdentityResources.Profile(),
-            new IdentityResource
-            {
-                Name = "rc.scope",
-                UserClaims =
-                {
-                    "rc.garndma"
-                }
-            }
-        };
 
         public static IEnumerable<ApiResource> GetApiResources() =>
         new List<ApiResource> {
             new ApiResource("ApiOne", new string[] { "read", "write" }),
         };
+
+        public static IEnumerable<IdentityResource> GetIdentityResources() =>
+        new List<IdentityResource>
+        {
+            new IdentityResources.OpenId(),
+            new IdentityResources.Profile(),
+
+        };
+
 
         public static IEnumerable<Client> GetClients() =>
         new List<Client> {
@@ -56,26 +49,26 @@ namespace IdentityServer.Configuration
             new Client {
 
                 ClientId = "client_id_mvc",
-                ClientSecrets = { new Secret("client_secret_mvc".ToSha256()) },
+                //ClientSecrets = { new Secret("client_secret_mvc".ToSha256()) },
 
                 AllowedGrantTypes = GrantTypes.Code,
                 RequirePkce = true,
-
-                RedirectUris = { "https://localhost:4001/signin-oidc" },
-                PostLogoutRedirectUris = { "https://localhost:4001/Home/Index" },
-
-                AllowedScopes = {
-                    "ApiOne",
-                    "ApiTwo",
-                    IdentityServerConstants.StandardScopes.OpenId,
-                    //IdentityServerConstants.StandardScopes.Profile,
-                    "rc.scope",
-                },
+                RequireClientSecret = false,
 
                 // puts all the claims in the id token
                 //AlwaysIncludeUserClaimsInIdToken = true,
                 AllowOfflineAccess = true,
                 RequireConsent = false,
+
+                RedirectUris = { "https://localhost:4001/signin-oidc" },
+                PostLogoutRedirectUris = { "https://localhost:4001/signout-oidc" },
+                AllowedCorsOrigins = {"https://localhost:4001"},
+
+                AllowedScopes = {
+                    "ApiOne",
+                    IdentityServerConstants.StandardScopes.OpenId,
+                    IdentityServerConstants.StandardScopes.Profile,
+                },
             },
 
         };
