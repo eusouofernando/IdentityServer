@@ -1,4 +1,4 @@
-# IdentityServer Duende + asp.net identity + entityFramework core
+## DuendeIdentityServer + Asp.Net Identity Core + EntityFramework Core
 
 
 ### 1-) add-migrations
