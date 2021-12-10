@@ -81,6 +81,7 @@ namespace IdentityServer
             app.UseStaticFiles();
             app.UseRouting();
 
+
             app.UseIdentityServer();
 
             if (env.IsDevelopment())

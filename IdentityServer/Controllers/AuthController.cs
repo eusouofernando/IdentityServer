@@ -75,7 +75,7 @@ namespace IdentityServer.Controllers
                 return View(vm);
             }
 
-            var user = new IdentityUser(vm.Username);
+            var user = new IdentityUser(vm.Email);
             var result = await _userManager.CreateAsync(user, vm.Password);
 
             if (result.Succeeded)
