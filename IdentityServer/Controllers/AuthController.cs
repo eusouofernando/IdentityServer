@@ -47,14 +47,18 @@ namespace IdentityServer.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel vm)
         {
-            var result = await _signInManager.PasswordSignInAsync(vm.Username, vm.Password, false, false);
 
-            if (result.Succeeded)
+            if (ModelState.IsValid)
             {
-                return Redirect(vm.ReturnUrl);
+                var result = await _signInManager.PasswordSignInAsync(vm.Username, vm.Password, false, false);
+
+                if (result.Succeeded)
+                {
+                    return Redirect(vm.ReturnUrl);
+                }
             }
 
-            return View();
+            return View(vm);
         }
 
         [HttpGet]
