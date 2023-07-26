@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
 
 namespace IdentityServer
 {
@@ -24,10 +25,11 @@ namespace IdentityServer
             var connectionString = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<AppDbContext>(config =>
             {
-                config.UseSqlServer(connectionString);
+                config.UseNpgsql(connectionString,
+                    options => options.SetPostgresVersion(new Version(9, 6)));
             });
 
-            services.AddIdentity<IdentityUser, IdentityRole>(config =>
+            services.AddIdentity<User, Role>(config =>
             {
                 config.Password.RequiredLength = 4;
                 config.Password.RequireDigit = false;
@@ -37,6 +39,7 @@ namespace IdentityServer
                 .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
 
+
             services.ConfigureApplicationCookie(config =>
             {
                 config.Cookie.Name = "IdentityServer.Cookie";
@@ -45,7 +48,7 @@ namespace IdentityServer
             });
 
             services.AddIdentityServer()
-                .AddAspNetIdentity<IdentityUser>()
+                .AddAspNetIdentity<User>()
                 //.AddConfigurationStore(options =>
                 //{
                 //    options.ConfigureDbContext = b => b.UseSqlServer(connectionString,

@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Logging;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace Client
 {
@@ -19,7 +20,8 @@ namespace Client
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
-        {
+        { 
+
 
             services.AddAuthentication(config =>
             {
@@ -30,7 +32,7 @@ namespace Client
                 .AddOpenIdConnect("oidc", config =>
                 {
                     config.Authority = "https://localhost:5001";
-                    config.ClientId = "client_id_mvc";
+                    config.ClientId = "dashboard";
                     //config.ClientSecret = "client_secret_mvc";
                     config.SaveTokens = true;
                     config.ResponseType = "code";
@@ -49,7 +51,7 @@ namespace Client
                     config.Scope.Clear();
                     config.Scope.Add("openid");
                     config.Scope.Add("profile");
-                    config.Scope.Add("ApiOne");
+                    config.Scope.Add("ApiTwo");
                     config.Scope.Add("offline_access");
 
                 });

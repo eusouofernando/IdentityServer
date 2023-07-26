@@ -18,12 +18,14 @@ namespace IdentityServer.Configuration
             {
                 // backward compat
                 new ApiScope("ApiOne","Api One"),
+                new ApiScope("ApiTwo","Api Two"),
             };
         }
 
         public static IEnumerable<ApiResource> GetApiResources() =>
         new List<ApiResource> {
             new ApiResource("ApiOne", new string[] { "read", "write" }),
+            new ApiResource("ApiTwo", new string[] { "read", "write" }),
         };
 
         public static IEnumerable<IdentityResource> GetIdentityResources() =>
@@ -43,7 +45,7 @@ namespace IdentityServer.Configuration
                 ClientId = "client_id",
                 ClientSecrets = { new Secret("client_secret".ToSha256()) },
                 AllowedGrantTypes = GrantTypes.ClientCredentials,
-                AllowedScopes = { "ApiOne" }
+                AllowedScopes = { "ApiTwo" }
             },
 
             new Client {
@@ -66,6 +68,31 @@ namespace IdentityServer.Configuration
 
                 AllowedScopes = {
                     "ApiOne",
+                    IdentityServerConstants.StandardScopes.OpenId,
+                    IdentityServerConstants.StandardScopes.Profile,
+                },
+            },
+
+            new Client {
+
+                ClientId = "dashboard",
+                //ClientSecrets = { new Secret("client_secret_mvc".ToSha256()) },
+
+                AllowedGrantTypes = GrantTypes.Code,
+                RequirePkce = true,
+                RequireClientSecret = false,
+
+                // puts all the claims in the id token
+                //AlwaysIncludeUserClaimsInIdToken = true,
+                AllowOfflineAccess = true,
+                RequireConsent = false,
+
+                RedirectUris = { "https://localhost:4001/signin-oidc" },
+                PostLogoutRedirectUris = { "https://localhost:4001/signout-oidc" },
+                AllowedCorsOrigins = {"https://localhost:4001"},
+
+                AllowedScopes = {
+                    "ApiTwo",
                     IdentityServerConstants.StandardScopes.OpenId,
                     IdentityServerConstants.StandardScopes.Profile,
                 },

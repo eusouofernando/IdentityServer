@@ -1,4 +1,5 @@
-﻿using IdentityServer.ViewModels;
+﻿using IdentityServer.Data;
+using IdentityServer.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -8,12 +9,12 @@ namespace IdentityServer.Controllers
     public class AuthController : Controller
     {
 
-        private readonly SignInManager<IdentityUser> _signInManager;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly SignInManager<User> _signInManager;
+        private readonly UserManager<User> _userManager;
 
         public AuthController(
-            SignInManager<IdentityUser> signInManager,
-            UserManager<IdentityUser> userManager)
+            SignInManager<User> signInManager,
+            UserManager<User> userManager)
         {
             _signInManager = signInManager;
             _userManager = userManager;
@@ -75,7 +76,9 @@ namespace IdentityServer.Controllers
                 return View(vm);
             }
 
-            var user = new IdentityUser(vm.Email);
+            var user = new User();
+            user.Email = vm.Email;
+            user.UserName = vm.Email;
             var result = await _userManager.CreateAsync(user, vm.Password);
 
             if (result.Succeeded)
@@ -85,7 +88,7 @@ namespace IdentityServer.Controllers
                 return Redirect(vm.ReturnUrl);
             }
 
-            return View();
+            return View(vm);
         }
     }
 }
